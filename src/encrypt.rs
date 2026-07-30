@@ -5,10 +5,9 @@ pub(crate) extern "C" fn ssize(str: *const i8) -> u64 {
     let mut size: u64 = 0 as u64;
     while '\u{0}' as i32 != unsafe { *str.add(size as usize) } as i32 {
         {
-            let __p = &mut size;
-            let __t = *__p;
-            *__p = (*__p).wrapping_add(1);
-            __t
+            let __old = size;
+            size = size.wrapping_add(1);
+            __old
         };
     }
     return size;
@@ -88,20 +87,15 @@ pub(crate) extern "C" fn beaufort_encrypt(
                             }
                             break '__c6;
                         }
-                        {
-                            let __p = &mut x;
-                            *__p += 1;
-                            *__p
-                        };
+                        x += 1;
                     }
                 }
                 if 0 == needed {
                     unsafe {
                         *enc.add({
-                            let __p = &mut size;
-                            let __t = *__p;
-                            *__p = (*__p).wrapping_add(1);
-                            __t
+                            let __old = size;
+                            size = size.wrapping_add(1);
+                            __old
                         } as usize) = ch
                     };
                     break '__c5;
@@ -109,10 +103,9 @@ pub(crate) extern "C" fn beaufort_encrypt(
                 k = unsafe {
                     *key.add(
                         ({
-                            let __p = &mut j;
-                            let __t = *__p;
-                            *__p += 1;
-                            __t
+                            let __old = j;
+                            j += 1;
+                            __old
                         } as u64
                             % ksize) as usize,
                     )
@@ -136,46 +129,31 @@ pub(crate) extern "C" fn beaufort_encrypt(
                             }
                             break '__c7;
                         }
-                        {
-                            let __p = &mut y;
-                            *__p += 1;
-                            *__p
-                        };
+                        y += 1;
                     }
                 }
                 if 0 == needed {
                     unsafe {
                         *enc.add({
-                            let __p = &mut size;
-                            let __t = *__p;
-                            *__p = (*__p).wrapping_add(1);
-                            __t
+                            let __old = size;
+                            size = size.wrapping_add(1);
+                            __old
                         } as usize) = ch
                     };
-                    {
-                        let __p = &mut j;
-                        let __t = *__p;
-                        *__p -= 1;
-                        __t
-                    };
+                    j -= 1;
                     break '__c5;
                 }
                 unsafe {
                     *enc.add({
-                        let __p = &mut size;
-                        let __t = *__p;
-                        *__p = (*__p).wrapping_add(1);
-                        __t
+                        let __old = size;
+                        size = size.wrapping_add(1);
+                        __old
                     } as usize) =
                         unsafe { *unsafe { (*mat.offset(y as isize)).offset(0 as isize) } }
                 };
                 break '__c5;
             }
-            {
-                let __p = &mut i;
-                *__p += 1;
-                *__p
-            };
+            i += 1;
         }
     }
     unsafe { *enc.add(size as usize) = '\u{0}' as i32 as i8 };

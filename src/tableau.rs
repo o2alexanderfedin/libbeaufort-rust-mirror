@@ -4,10 +4,9 @@ pub(crate) extern "C" fn ssize(str: *const i8) -> u64 {
     let mut size: u64 = 0 as u64;
     while '\u{0}' as i32 != unsafe { *str.add(size as usize) } as i32 {
         {
-            let __p = &mut size;
-            let __t = *__p;
-            *__p = (*__p).wrapping_add(1);
-            __t
+            let __old = size;
+            size = size.wrapping_add(1);
+            __old
         };
     }
     return size;
@@ -59,14 +58,12 @@ pub(crate) extern "C" fn beaufort_tableau(alpha: *const i8) -> *mut *mut i8 {
                         }
                         {
                             {
-                                let __p = &mut x;
-                                *__p += 1;
-                                *__p
+                                x += 1;
+                                x
                             };
                             {
-                                let __p = &mut j;
-                                *__p -= 1;
-                                *__p
+                                j -= 1;
+                                j
                             }
                         };
                     }
@@ -76,11 +73,7 @@ pub(crate) extern "C" fn beaufort_tableau(alpha: *const i8) -> *mut *mut i8 {
                 };
                 break '__c9;
             }
-            {
-                let __p = &mut y;
-                *__p += 1;
-                *__p
-            };
+            y += 1;
         }
     }
     unsafe { *mat.offset(y as isize) = 0 as *mut () as *mut i8 };
